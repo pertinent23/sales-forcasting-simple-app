@@ -14,7 +14,7 @@ def upload_file():
         if 'files[]' not in request.files:
             print("redirection")
             return redirect(request.url)
-        files = request.files.getList( 'files[]' )
+        files = request.files.getlist( 'files[]' )
         if not files:
             return
         
@@ -22,7 +22,7 @@ def upload_file():
         for file in files:
             if file:
                 img_bytes = file.read()
-                class_name ,class_id = get_prediction( image_bytes=img_bytes )
+                class_name ,class_id = get_prediction( img_bytes )
                 final.append( { 'id': class_id, 'name': class_name } )
         return render_template( 'result.html', list=final )
     return render_template( 'index.html' )
