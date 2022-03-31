@@ -11,27 +11,20 @@ app = Flask(__name__)
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        if 'file' not in request.files:
+        if 'files[]' not in request.files:
             print("redirection")
             return redirect(request.url)
-        file = request.files.get( 'file' )
-        file = file if file  else request.files.getList( 'file' )
-        if not file:
+        files = request.files.getList( 'files[]' )
+        if not files:
             return
-
-        files = request.files.getList( 'file' )
-        if files:
-            final = [ ]
-            for file in files:
+        
+        final = [ ]
+        for file in files:
+            if file:
                 img_bytes = file.read()
                 class_name ,class_id = get_prediction( image_bytes=img_bytes )
                 final.append( { 'id': class_id, 'name': class_name } )
-            return render_template( 'result.html', list=final )
-        else: 
-            file = request.files.get( 'file' )
-            img_bytes = file.read()
-            class_name ,class_id = get_prediction( image_bytes=img_bytes )
-            return render_template( 'result.html', list=[ { 'id': class_id, 'name': class_name } ] )
+        return render_template( 'result.html', list=final )
     return render_template( 'index.html' )
 
 
