@@ -22,8 +22,12 @@ def upload_file():
         for file in files:
             if file:
                 img_bytes = file.read()
-                class_name ,class_id = get_prediction( img_bytes )
-                final.append( { 'id': class_id, 'name': class_name } )
+                class_name, class_id = get_prediction( image_bytes=img_bytes )
+                isint = isinstance( class_id, int )
+                final.append( { 
+                    'id': class_id if isint else class_name, 
+                    'name': class_name if isint else class_id
+                } )
         return render_template( 'result.html', list=final )
     return render_template( 'index.html' )
 
