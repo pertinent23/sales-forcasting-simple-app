@@ -1,4 +1,5 @@
 import json
+from logging import error
 
 from commons import get_model, transform_image
 from PIL import Image
